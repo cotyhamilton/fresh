@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-window
 import { createContext, useContext, useEffect, useState } from "preact/compat";
+import { IS_BROWSER } from "fresh/runtime";
 
 type Theme = "dark" | "light" | "system";
 
@@ -28,7 +29,11 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
+    () => (
+      IS_BROWSER
+        ? ((localStorage.getItem(storageKey) as Theme) || defaultTheme)
+        : defaultTheme
+    ),
   );
   useEffect(() => {
     const root = window.document.documentElement;
